@@ -2,6 +2,8 @@
 
 
 
+GLOBAL_LIST_EMPTY(all_areas)
+
 // ===
 /area
 	var/global/global_uid = 0
@@ -10,6 +12,7 @@
 	var/obj/structure/ai_routing_node/ai_routing_node = null
 
 /area/New()
+	all_areas += src
 	icon_state = ""
 	uid = ++global_uid
 
@@ -364,3 +367,6 @@ var/list/mob/living/forced_ambiance_list = new
 /area/proc/has_turfs()
 	return !!(locate(/turf) in src)
 
+/area/Destroy()
+	all_areas -= src
+	return ..()

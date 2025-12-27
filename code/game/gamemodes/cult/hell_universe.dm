@@ -31,9 +31,10 @@ In short:
 	KillMobs()
 
 /datum/universal_state/hell/proc/MiscSet()
-	for(var/turf/simulated/floor/T in world)
-		if(!T.holy && prob(1))
-			new /obj/effect/gateway/active/cult(T)
+	for(var/area/A in all_areas)
+		for(var/turf/simulated/floor/T in A)
+			if(!T.holy && prob(1))
+				new /obj/effect/gateway/active/cult(T)
 
 /datum/universal_state/hell/proc/KillMobs()
 	for(var/mob/living/simple_animal/M in SSmobs.mob_list)
