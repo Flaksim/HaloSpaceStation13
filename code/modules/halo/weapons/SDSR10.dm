@@ -35,9 +35,9 @@
 	damtype = PAIN
 	damage = 40
 	//NOTE: Life() calls happen every two seconds, and life() reduces dizziness by one
-	var/stun_time = 2 //This is in ticks
+	var/stun_time = 8 //This is in ticks
 	var/suppress_intensity = 9
-	var/disorient_time = 8
+	var/disorient_time = 10
 
 /obj/item/projectile/SDSS_proj/on_hit(var/mob/living/carbon/human/L, var/blocked = 0, var/def_zone = null)
 	. = ..()
