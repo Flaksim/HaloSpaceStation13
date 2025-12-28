@@ -273,8 +273,10 @@ var/global/datum/controller/radio/radio_controller
 /datum/radio_frequency/proc/post_signal(obj/source as obj|null, datum/signal/signal, var/filter = null as text|null, var/range = 0)
 	//send the signal to everything by default
 	if(!filter)
-		filter = RADIO_DEFAULT
-	send_to_filter(signal, filter, source, range)
+		for(var/sub_filter in devices)
+			send_to_filter(signal, sub_filter, source, range)
+	else
+		send_to_filter(signal, filter, source, range)
 
 //Sends a signal to all machines belonging to a given filter. Should be called by post_signal()
 /datum/radio_frequency/proc/send_to_filter(datum/signal/signal, var/filter, obj/source as obj|null, var/transmit_global = 0)
