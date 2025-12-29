@@ -288,35 +288,36 @@ var/global/datum/controller/radio/radio_controller
 	var/list/broadcasting_sectors = list()
 
 	//let's check for nearby telecomms machinery which will interact with the signal
-	for(var/obj/effect/overmap/nearby_sector in range(OVERMAP_TELECOMMS_BASE_RANGE, source_sector))
+	if(source_sector)
+		for(var/obj/effect/overmap/nearby_sector in range(OVERMAP_TELECOMMS_BASE_RANGE, source_sector))
 
-		//check for receivers
-		var/sector_finished = 0
-		for(var/obj/machinery/overmap_comms/receiver/receiver in nearby_sector.telecomms_receivers)
+			//check for receivers
+			var/sector_finished = 0
+			for(var/obj/machinery/overmap_comms/receiver/receiver in nearby_sector.telecomms_receivers)
 
-			//will this receiever broadcast the signal globally?
-			if(receiver.get_range_extension(signal) >= 1)
+				//will this receiever broadcast the signal globally?
+				if(receiver.get_range_extension(signal) >= 1)
 
-				//we are
-				transmit_global = 1
-				broadcasting_sectors |= nearby_sector
+					//we are
+					transmit_global = 1
+					broadcasting_sectors |= nearby_sector
 
-				//dont need to scan this sector any further
-				sector_finished = 1
+					//dont need to scan this sector any further
+					sector_finished = 1
+					break
+
+			if(sector_finished)
 				break
 
-		if(sector_finished)
-			break
+			//backwards compatibility: the old code used relays, so check if those exist and are active
+			for(var/obj/machinery/telecomms/relay/relay in nearby_sector.telecomms_receivers)
+				if(relay.on)
+					transmit_global = 1
+					broadcasting_sectors |= nearby_sector
 
-		//backwards compatibility: the old code used relays, so check if those exist and are active
-		for(var/obj/machinery/telecomms/relay/relay in nearby_sector.telecomms_receivers)
-			if(relay.on)
-				transmit_global = 1
-				broadcasting_sectors |= nearby_sector
-
-				//dont need to scan this sector any further
-				sector_finished = 1
-				break
+					//dont need to scan this sector any further
+					sector_finished = 1
+					break
 
 	//see which devices are in range
 	var/list/listening_sectors = list()
